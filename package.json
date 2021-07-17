@@ -1,0 +1,23 @@
+{
+  "name": "edutech",
+  "version": "1.0.0",
+  "description": "eduTech web service",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "nno3onn",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/speech": "^4.5.3",
+    "@google-cloud/text-to-speech": "^3.2.3",
+    "dialogflow-fulfillment": "^0.6.1",
+    "express": "^4.17.1",
+    "https": "^1.0.0",
+    "nodemon": "^2.0.7",
+    "read-excel-file": "^5.2.4",
+    "reveal.js": "^4.1.3"
+  }
+}

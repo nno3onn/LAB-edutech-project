@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://kit.fontawesome.com/0ef7ff4b6e.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./node_modules/reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="./node_modules/reveal.js/dist/theme/sky.css">
+    <link rel="stylesheet" href="./css/style.css"/>
+</head>
+<body>
+    <div class="reveal">
+        <!-- <div class="slides" id="slide">
+            <section id="home">
+                <div class="container">
+                    <div id="block-study">Study</div>
+                    <div id="block-quiz">Quiz</div>
+                </div>
+            </section>
+        </div> -->
+        <div class="slides" id="slide">
+            <i id="icon-listen" class="fas fa-music fa-2x"></i>
+            <section>
+                <p id="word-en">eng</p>
+                <p id="word-ko" class="fragment fade-in">kor</p>
+                <audio data-autoplay src="./resources/deduction.mp3"></audio>
+            </section>
+        </div>
+    </div>
+    <script src="./node_modules/reveal.js/dist/reveal.js"></script>
+    <script>
+        Reveal.initialize({
+            autoPlayMedia: true
+        });
+    </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="./index.js"></script>
+</body>
+</html>

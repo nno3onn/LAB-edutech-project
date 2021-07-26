@@ -85,13 +85,16 @@ function mixArrayRandom(array) {
 // };
 
 $("#btn-study").on("click", () => {
-  console.log('a');
+  console.log('btn-study');
   revealWords(wordList);
   // listenWords(word_list);
-  $("#home").css("display", "inline-block");
+  // $("#home").css("display", "inline-block");
 });
 
-$("#btn-quiz").on("click", () => {});
+$("#btn-quiz").on("click", () => {
+  console.log('btn-quiz');
+  
+});
 
 $("#icon-listen").on("click", () => {
   let word = $(".present #word-en").text();

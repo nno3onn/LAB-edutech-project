@@ -7,6 +7,10 @@ const tts = require("./js/tts");
 const spreadSheet = require("./js/spreadSheet");
 const webhook = require("./js/webhook");
 
+const mainRouter = require('./routes/main');
+const studyRouter = require('./routes/study');
+const quizRouter = require('./routes/quiz');
+
 const options = {
   key: fs.readFileSync("./static/ssl/private.key"),
   cert: fs.readFileSync("./static/ssl/certificate.crt"),
@@ -18,11 +22,16 @@ app.set("port", process.env.PORT || 8080);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(__dirname));
+// app.engine('html', require('ejs').renderFile);
+// app.set('view engine', 'html');
 
 app.get("/", (req, res) => {
-  res.writeHead(200);
   res.render("index");
 });
+
+app.use('/main', mainRouter);
+app.use('/study', studyRouter);
+app.use('/quiz', quizRouter);
 
 // app.post("/webhook", (req, res) => {
 // webhook(req, res, "seats", "seats");

@@ -1,42 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <script src="https://kit.fontawesome.com/0ef7ff4b6e.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="./node_modules/reveal.js/dist/reveal.css">
-    <link rel="stylesheet" href="./node_modules/reveal.js/dist/theme/sky.css">
-    <link rel="stylesheet" href="./css/style.css"/>
-</head>
-<body>
+    <script src="https://kit.fontawesome.com/0ef7ff4b6e.js" crossorigin="anonymous" ></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="./node_modules/reveal.js/dist/reveal.css" />
+    <link rel="stylesheet" href="./node_modules/reveal.js/dist/theme/sky.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <nav id="topMenu">
+      <ul>
+        <li class="icon">
+            <div data-toggle="dropdown">
+              <i id="mypage" class="far fa-user-circle"></i>
+              <i class="fas fa-caret-down"></i>
+            </div>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">    
+              <li><a class="dropdown-item" href="#">Your profile</a></li>
+              <li><a id="chart" class="dropdown-item" href="#">Your study chart</a></li>
+              <li><hr class="dropdown-divider"></li>     
+              <li><a class="dropdown-item" href="#">Settings</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">Sign out</a></li>
+            </ul>
+        </li>
+        <li class="icon">
+            <div data-toggle="dropdown">
+              <i class="bi bi-plus"></i>
+              <i class="fas fa-caret-down"></i>
+            </div>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">            
+              <li><a class="dropdown-item" href="#">dd</a></li>
+              <li><a class="dropdown-item" href="#">asds</a></li>
+              <li><a class="dropdown-item" href="#">asds</a></li>
+              <li><a class="dropdown-item" href="#">asds</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">asds</a></li>
+              <li><a class="dropdown-item" href="#">asds</a></li>
+              <li><a class="dropdown-item" href="#">asds</a></li>
+            </ul>
+        </li>
+        <!-- <li>
+          <a href="#"
+            ><i id="listen" class="icon bi bi-music-note-beamed"></i
+          ></a>
+        </li> -->
+        <li class="icon"><i id="noti" class="far fa-bell"></i></li>
+        <li class="icon"><i id="setting" class="fas fa-cog"></i></li>
+        <li class="icon"><i id="home" class="fas fa-home"></i></li>
+      </ul>
+    </nav>
+
+    <section>
+      <div class="container">
+        <div class="block" id="btn-study">Study</div>
+        <div class="block"id="btn-quiz">Quiz</div>
+      </div>
+    </section>
+    <!-- <div class="container">
+      <video autoplay="true" id="videoElement"></video>
+    </div> -->
+
     <div class="reveal">
-        <!-- <div class="slides" id="slide">
-            <section id="home">
-                <div class="container">
-                    <div id="block-study">Study</div>
-                    <div id="block-quiz">Quiz</div>
-                </div>
-            </section>
-        </div> -->
-        <div class="slides" id="slide">
-            <i id="icon-listen" class="fas fa-music fa-2x"></i>
-            <section>
-                <p id="word-en">eng</p>
-                <p id="word-ko" class="fragment fade-in">kor</p>
-                <audio data-autoplay src="./resources/deduction.mp3"></audio>
-            </section>
-        </div>
+      <div class="slides" id="slide">
+      </div>
+      <div class="slides" id="slide">
+        <section>
+          <p id="word-en">eng</p>
+          <p id="word-ko" class="fragment fade-in">kor</p>
+        </section>
+      </div>
     </div>
     <script src="./node_modules/reveal.js/dist/reveal.js"></script>
     <script>
-        Reveal.initialize({
-            autoPlayMedia: true
-        });
+      Reveal.initialize({
+        autoPlayMedia: true,
+      });
     </script>
+
     <script src="/socket.io/socket.io.js"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous" ></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous" ></script>
     <script src="./index.js"></script>
-</body>
+    <!-- <script src="./js/getUserMedia.js"></script> -->
+  </body>
 </html>

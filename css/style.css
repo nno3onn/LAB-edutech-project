@@ -1,46 +1,63 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap");
 
 * {
-    font-family: 'Noto Sans KR', sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 .container {
-    /* display: inline-block; */
+  background-color: green;
+  /* margin: 0px auto; */
+  /* width: 500px; */
+  /* height: 375px; */
+}
+#videoElement {
+  width: 500px;
+  height: 375px;
+  background-color: #666;
+}
+#topMenu {
+  /* height: 30px; */
+  width: 850px;
+  padding: 20px;
+  float: right;
+  /* 오른쪽으로 text가 따라 붙지 않도록 함. 아래로 이동*/
+  /* clear: right; */
+}
+#topMenu ul li {
+  list-style: none;
+}
+.icon {
+  float: right;
+  margin: 5px;
+  padding: 5px;
+  font-size: 1.5rem;
+  color: black;
+}
+.fa-caret-down {
+    font-size: 1rem;
+}
+.icon:hover {
+  cursor: pointer;
+  color: cornflowerblue;
 }
 
-#block-study, #block-quiz {
-    display: inline-block;
-    width: 400px;
-    height: 150px;
-    
-    text-align: center;
-    padding-top: 100px;
+.block {
+  background-color:yellow;
+  /* display: inline-block; */
+  /* width: 400px; */
+  /* height: 150px; */
+  text-align: center;
+  /* padding-top: 100px; */
 }
-#block-study:hover, #block-quiz:hover {
-    cursor: pointer;
+.block:hover {
+  cursor: pointer;
 }
-#block-study {
-    background-color: #407294;
+#home, #listen, #setting {
+  display: none;
 }
-#block-quiz {
-    background-color: #ffd700;
-}
-
 #word-en {
-    font-size: 150px;
+  font-size: 150px;
 }
 #word-ko {
-    font-size: 80px;
-}
-
-#icon-listen {
-    position: sticky;
-    z-index: 10;
-    margin: 50px;
-    padding: 30px;
-    float: right;
-}
-#icon-listen:hover {
-    cursor: pointer;
-    
+  font-size: 80px;
 }

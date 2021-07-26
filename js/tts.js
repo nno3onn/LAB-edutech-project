@@ -8,7 +8,7 @@ const client = new text.TextToSpeechClient({
     keyFilename:keyfile
 });
 
-function tts (speakLang, speakGender, speakText) {
+module.exports = function tts (speakLang, speakGender, speakText) {
     return new Promise((resolve, reject) => { 
         const txt = speakText;
         const request = {
@@ -33,7 +33,3 @@ function tts (speakLang, speakGender, speakText) {
     });
 }
 // tts('en-US', 'FEMALE', 'hello world');
-
-module.exports = {
-    'tts': tts
-}

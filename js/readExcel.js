@@ -1,6 +1,6 @@
 const xlsxFile = require('read-excel-file/node');
 
-function readExcel(filePath) {
+module.exports = function readExcel(filePath) {
     return new Promise((resolve, reject) => { 
         xlsxFile(filePath).then((lines) => {
             let words = [];
@@ -23,7 +23,3 @@ function readExcel(filePath) {
 
 // const filePath = '../static/eng-words.xlsx';
 // readExcel(filePath)
-
-module.exports = {
-    'readExcel': readExcel
-}

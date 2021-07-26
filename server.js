@@ -1,80 +1,97 @@
-const https = require('https');
-const fs = require('fs');
-const express = require('express');
+const https = require("https");
+const fs = require("fs");
+const express = require("express");
 
-const { WebhookClient } = require('dialogflow-fulfillment');
-const { readExcel } = require('./js/readExcel');
-const { tts } = require('./js/tts');
+const tts = require("./js/tts");
+// const readExcel = require("./js/readExcel");
+const spreadSheet = require("./js/spreadSheet");
+const webhook = require("./js/webhook");
+
+const options = {
+  key: fs.readFileSync("./static/ssl/private.key"),
+  cert: fs.readFileSync("./static/ssl/certificate.crt"),
+  ca: fs.readFileSync("./static/ssl/ca_bundle.crt"),
+};
 
 const app = express();
-app.set('port', process.env.PORT || 8080);
-app.use(express.urlencoded({extended : true}));
+app.set("port", process.env.PORT || 8080);
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(__dirname));
 
-const options = {
-    key: fs.readFileSync('./static/ssl/private.key'),
-    cert: fs.readFileSync('./static/ssl/certificate.crt'),
-    ca: fs.readFileSync('./static/ssl/ca_bundle.crt'),
+app.get("/", (req, res) => {
+  res.writeHead(200);
+  res.render("index");
+});
+
+// app.post("/webhook", (req, res) => {
+// webhook(req, res, "seats", "seats");
+// });
+
+const server = https.createServer(options, app).listen(app.get("port"), () => {
+  console.log(
+    `Application Running: https://localhost:${server.address().port}`
+  );
+});
+
+// const server = app.listen(app.get("port"), () => {
+//   console.log(`Application Running: http://localhost:${server.address().port}`);
+// });
+
+function readGSSWords() {
+  return new Promise(async (resolve, reject) => {
+    await spreadSheet(
+      "../grpckey.json",
+      "1Ak7DXz9kBoos5CW8_0aJ77ZeaG_uS_Uk6MGeD10L2Gg",
+      "eng"
+    ).then((rows) => {
+      let words = [];
+
+      Promise.all(
+        rows.map(async (row) => {
+          const word = row.word;
+          const mean1 = row.mean1;
+          const mean2 = row.mean2;
+          const mean3 = row.mean3;
+          words = words.concat([{ word, mean1, mean2, mean3 }]);
+          await tts("en-US", "FEMALE", word);
+        })
+      );
+
+      console.log("finished TTS.");
+      resolve(words);
+    });
+  });
 }
 
-app.get('/', (req, res) => {
-    res.writeHead(200);
-    res.render('index');
-});
-
-app.post('/webhook', (req, res) => {
-    let agent = new WebhookClient({request: req, response: res});
-    // console.log('Dialogflow Request headers: ' + JSON.stringify(req.headers));
-    // console.log('Dialogflow Request body: ' + JSON.stringify(req.body));
-    function storeFunctionHandler(agent) {
-        // const allContext = agent.contexts;
-        const context = agent.context.get('test-intent-followup');
-        // console.log('allContext :' + JSON.stringify(allContext));
-        console.log('context: ',context);
-        agent.add(`수리를 요청한 프로덕트는 ${context.parameters.productname}이며 
-            예약 일자는 ${context.parameters['date-time'].date_time} 입니다.`);
-    }
-
-    let intentMap = new Map();
-    intentMap.set('test-intent - custom - yes', storeFunctionHandler);
-    agent.handleRequest(intentMap);
-});
-
-
-
-const server = https.createServer(options, app).listen(app.get('port'), () => {
-    console.log(`Application Running: https://localhost:${server.address().port}`);
-});
-
-(async() => {
-    let word_list;
-    async function getWords() {
-        const filePath = './static/eng-words.xlsx';
-        await readExcel(filePath)
-            .then((words) => { 
-                // console.log(words);
-                Promise.all(words.map(word => {
-                    let en = word.word_en;
-                    tts('en-US', 'FEMALE', en)
-                }))
-                return words;
-            })
-            .then((words) => { word_list = words; })
-    };
-
-    
-    await getWords();
-    // console.log(word_list)
-
-    const io = require('socket.io')(server);
-    io.on('connection', (socket) => {
-        console.log(`user connected: ${socket.id}`);
-
-        io.emit('words', word_list);
-
-        socket.on('disconnect', () => {
-            console.log('user disconnected: ', socket.id);
-        });
+function getWords() {
+  return new Promise(async (resolve, reject) => {
+    const filePath = "./static/eng-words.xlsx";
+    await readExcel(filePath).then((words) => {
+      // console.log(words);
+      Promise.all(
+        words.map((word) => {
+          let en = word.word_en;
+          tts("en-US", "FEMALE", en);
+        })
+      );
+      resolve(words);
     });
+  });
+}
+
+(async () => {
+  // const words = await getWords(); // get excel file
+  const words = await readGSSWords(); // get google spreadsheet
+
+  const io = require("socket.io")(server);
+  io.on("connection", (socket) => {
+    console.log(`user connected: ${socket.id}`);
+
+    io.emit("words", words);
+
+    socket.on("disconnect", () => {
+      console.log("user disconnected: ", socket.id);
+    });
+  });
 })();

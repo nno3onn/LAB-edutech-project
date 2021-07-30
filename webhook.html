@@ -25,7 +25,7 @@
         font-family: 'Noto Sans KR';
       "
     >
-      영화 예약 현황
+      영화 예매 현황
     </h1>
     <ul class="list-group"></ul>
 
@@ -47,21 +47,21 @@
     ></script>
     <script>
       let socket = io();
-
-      socket.on("seats", (seats, resrv) => {
-        console.log("예매 완료");
+      
+      socket.on("seats", (resrv) => {
+        console.log("예매 완료", resrv);
         let temp = `<li class="list-group-item"> 
               영화명: ${resrv.movie}<br>
               예매 시간: ${resrv.datetime}<br>
-              좌석: ${seats}
+              좌석: ${resrv.seats}
               </li>`;
         $(".list-group").append(temp);
       });
 
-      socket.on("resrvTime", (datetime, product) => {
-        let temp = `<li class="list-group-item">${product} 수리 예약 : ${datetime}</li>`;
-        $(".list-group").append(temp);
-      });
+      // socket.on("resrvTime", (datetime, product) => {
+      //   let temp = `<li class="list-group-item">${product} 수리 예약 : ${datetime}</li>`;
+      //   $(".list-group").append(temp);
+      // });
     </script>
   </body>
 </html>

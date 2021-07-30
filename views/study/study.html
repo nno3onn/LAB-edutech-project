@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://kit.fontawesome.com/0ef7ff4b6e.js" crossorigin="anonymous" ></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="/css/dist/reveal.css" />
+  <link rel="stylesheet" href="/css/dist/theme/sky.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="https://www.w3schools.com/lib/w3.js"></script>
+</head>
+<body>
+  <div w3-include-HTML="/html/navibar.html"></div>
+  <script>
+    w3.includeHTML();
+  </script>
+  <div class="reveal">
+    <div class="slides" id="slide">
+      <section id="first-page">
+        <p id="loading">loading . . .</p>
+      </section>
+    </div>
+  </div>
+  <script src="/css/dist/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+      autoPlayMedia: true,
+    });
+  </script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous" ></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous" ></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous" ></script>
+  <!-- <script src="/js/revealWordList.js" type="module"></script> -->
+  <script src="/js/study.js" type="module"></script>
+</body>
+</html>

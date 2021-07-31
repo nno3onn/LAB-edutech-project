@@ -1,6 +1,6 @@
 const fs = require('fs');
 const text = require('@google-cloud/text-to-speech');
-const { getSheet } = require('./googleSheets');
+const { getSheet } = require('../googleSheets');
 
 const projectId = 'edutech-318507';
 const keyFilename = '../grpckey.json';

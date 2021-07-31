@@ -14,10 +14,12 @@
   <script src="https://www.w3schools.com/lib/w3.js"></script>
 </head>
 <body>
-  <div w3-include-HTML="/html/navibar.html"></div>
+  <div w3-include-HTML="/templates/navibar.html"></div>
   <script>
     w3.includeHTML();
   </script>
+  
+  <i id="icon-listen" class="fas fa-headphones fa-3x"></i>
   <div class="reveal">
     <div class="slides" id="slide">
       <section id="first-page">
@@ -28,6 +30,7 @@
   <script src="/css/dist/reveal.js"></script>
   <script>
     Reveal.initialize({
+      // keyboardCondition: 'focused'
       autoPlayMedia: true,
     });
   </script>
@@ -35,7 +38,8 @@
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous" ></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous" ></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous" ></script>
-  <!-- <script src="/js/revealWordList.js" type="module"></script> -->
-  <script src="/js/study.js" type="module"></script>
+  <script type="module" src="/js/study/study.js"></script>
+  <script src="/js/study/handleClick.js"></script>
+  <script src="/js/study/handleListen.js"></script>
 </body>
 </html>

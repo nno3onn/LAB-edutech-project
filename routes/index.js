@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const main = require('./main');
-const user = require('./user');
+const accounts = require('./accounts');
 const study = require('./study');
 const sign = require('./sign');
 
@@ -12,7 +12,7 @@ const sign = require('./sign');
     put: 수정
     delete: 삭제    */
 router.use('/', main);
-router.use('/user', user);
+router.use('/accounts', accounts);
 router.use('/study', study);
 router.use('/sign', sign);
 

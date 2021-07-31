@@ -4,10 +4,10 @@ const http = require('http');
 const https = require("https");
 
 /* get fs modules */
-const { ttsEng } = require('../public/js/tts');
+const db = require('../public/js/db.js');
+const { ttsEng } = require('../public/js/study/tts');
+// const stt = require('../publicjs/study/stt');
 // const webhook = require('../public/js/webhook');
-// const stt = require('../public/js/stt');
-const readExcel = require('../public/js/readExcel');
 const { getSheet } = require('../public/js/googleSheets');
 
 /* https ssl */
@@ -39,16 +39,34 @@ const ttsData = { gender: 'FEMALE',
                 };
 
 const io = require('socket.io')(server);
-io.on('connection', async (socket) => {
+
+io.on('connection', (socket) => {
   console.log(`user connected: ${socket.id}`);
 
-  await ttsEng(sheetData, ttsData)
-    .then((wordList) => {
-      console.log(wordList)
-      socket.emit('words', wordList);
-    });
+  /** STUDY SCREEN
+   * 
+   */
+  /* display studyList in Reveal.js */
+  socket.on('access-page', async (page) => {
+    switch (page) {
+      case '/study/study':
+        await ttsEng(sheetData, ttsData)
+        .then((wordArray) => {
+          socket.emit('wordList', wordArray);
+      });
+    }
+  });
+  /* count o,x */
+  socket.on('study-oxCount', (id, check) => {
+    console.log(id, check);
+  });
 
-  socket.on('disconnect', () => {
-    console.log(`user disconnected: ${socket.id}`);
-  })
+
+  /** QUIZ SCREEN
+   * 
+   */
+
+
+  socket.on('disconnect', () => { console.log(`user disconnected: ${socket.id}`);
+  });
 });

@@ -14,7 +14,7 @@ app.set('views', [path.join(__dirname, 'views'),
                   path.join(__dirname, 'views/home'),
                   path.join(__dirname, 'views/study'),
                   path.join(__dirname, 'views/sign'),
-                  path.join(__dirname, 'views/user')]);
+                  path.join(__dirname, 'views/accounts')]);
                   
 /* 화면 engine을 html로 설정 */
 app.engine('html', require('ejs').renderFile);

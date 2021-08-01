@@ -1,10 +1,16 @@
 const app = require('../app');
+const path = require('path');
 const fs = require("fs");
 const http = require('http');
 const https = require("https");
+const dotenv = require('dotenv');
+
+/** .env 파일 자동으로 인식하여 환경변수 설정하기
+ */
+dotenv.config();
 
 /* get fs modules */
-const db = require('../public/js/db.js');
+const db = require('../public/js/db.js'); // make tables in SQLite DB
 const { ttsEng } = require('../public/js/study/tts');
 // const stt = require('../publicjs/study/stt');
 // const webhook = require('../public/js/webhook');
@@ -22,12 +28,12 @@ const options = {
  */
 app.set("port", process.env.PORT || 8080); // express 서버 포트 설정
 /* http || https 서버 생성 */
-const server = http.createServer(app).listen(app.get('port'), () => {
-  console.log(`Application Running: http://localhost:${server.address().port}`);
-});
-// const server = https.createServer(options, app).listen(app.get("port"), () => {
-//   console.log(`Application Running: https://localhost:${server.address().port}`);
+// const server = http.createServer(app).listen(app.get('port'), () => {
+//   console.log(`Application Running: http://localhost:${server.address().port}`);
 // });
+const server = https.createServer(options, app).listen(app.get("port"), () => {
+  console.log(`Application Running: https://localhost:${server.address().port}`);
+});
 
 /* execute tts english word list */
 const sheetData = { keypath: "../grpckey.json",
@@ -40,33 +46,41 @@ const ttsData = { gender: 'FEMALE',
 
 const io = require('socket.io')(server);
 
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
   console.log(`user connected: ${socket.id}`);
 
-  /** STUDY SCREEN
-   * 
-   */
+  let wordList;
+
+  /** make tts datas */
+  await ttsEng(sheetData, ttsData)
+  .then(({ wordList, wordHead}) => {
+    db.insertWordHead('studyEng', wordHead);
+    wordList = wordList;
+  });
+
+  
+
   /* display studyList in Reveal.js */
   socket.on('access-page', async (page) => {
     switch (page) {
       case '/study/study':
-        await ttsEng(sheetData, ttsData)
-        .then((wordArray) => {
-          socket.emit('wordList', wordArray);
-      });
+        socket.emit('wordList', wordList);
     }
   });
+
+  /** STUDY SCREEN
+  * 
+  */
   /* count o,x */
   socket.on('study-oxCount', (id, check) => {
     console.log(id, check);
+
   });
 
 
   /** QUIZ SCREEN
    * 
    */
-
-
   socket.on('disconnect', () => { console.log(`user disconnected: ${socket.id}`);
   });
 });

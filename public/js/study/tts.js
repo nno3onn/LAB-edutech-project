@@ -2,8 +2,10 @@ const fs = require('fs');
 const text = require('@google-cloud/text-to-speech');
 const { getSheet } = require('../googleSheets');
 
+
 const projectId = 'edutech-318507';
-const keyFilename = '../grpckey.json';
+console.log(__dirname)
+const keyFilename = './public/grpckey.json';
 
 const client = new text.TextToSpeechClient({
     projectId,
@@ -39,7 +41,7 @@ const tts = (lang, gender, text) => {
         console.error('ERROR:', err);
         return;
       }
-      fs.writeFile(`../resources/${text}.mp3`, res.audioContent, 'binary', err => {
+      fs.writeFile(`./public/resources/${text}.mp3`, res.audioContent, 'binary', err => {
         if (err) {
           return console.error('ERROR:', err);
         }
@@ -89,21 +91,24 @@ const ttsEng = ( sheetData, ttsData ) => {
     await sheet.getRows()
       .then((rows) => {
         let wordList = new Array();
+        let wordHead = new Array();
 
         rows.map(async(row) => {
           let obj = new Object();
 
           for (const header of sheet.headerValues) {
             const text = row[header];
-
-            if (text) {
+            if (text) { // 데이터가 있는 경우
               obj[header] = text;
+
+              if(header===sheet.headerValues[0]) {
+                wordHead.push(text);
+              }
               /* 이미 해당 단어의 mp3 파일이 있다면 생략 */
-              const check = 1;
               if (!searchFile('./public/resources', text)) {
                 console.log(`make ${text}.mp3 file`);
                 await tts((header===sheet.headerValues[0]) ? ttsData.lang : 'ko-KR',
-                          ttsData.ttsGender,
+                          ttsData.gender,
                           text);
               }
             }
@@ -111,7 +116,7 @@ const ttsEng = ( sheetData, ttsData ) => {
           wordList.push(obj);
         });
         console.log('tts-eng finished.');
-        resolve(wordList);
+        resolve({ wordList, wordHead });
       });
   });
 }

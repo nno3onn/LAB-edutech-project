@@ -3,11 +3,8 @@ const path = require('path');
 const fs = require("fs");
 const http = require('http');
 const https = require("https");
-const dotenv = require('dotenv');
-
-/** .env 파일 자동으로 인식하여 환경변수 설정하기
- */
-dotenv.config();
+const url = require('url');
+const qs = require('querystring');
 
 /* get fs modules */
 const db = require('../public/js/db.js'); // make tables in SQLite DB
@@ -23,15 +20,30 @@ const options = {
   ca: fs.readFileSync("./public/ssl/ca_bundle.crt"),
 };
 
+/** Cookie
+ * 
+ */
+ const parseCookies = (cookie = '') => 
+ cookie
+     .split(';')
+     .map(v => v.split('='))
+     .reduce((acc, [k, v]) => {
+         acc[k.trim()] = decodeURIComponent(v);
+         return acc;
+     }, {});
+
 /**
  * Get port from environment and store in Express.
  */
 app.set("port", process.env.PORT || 8080); // express 서버 포트 설정
 /* http || https 서버 생성 */
-// const server = http.createServer(app).listen(app.get('port'), () => {
+// const server = http.createServer(app)
+//   .listen(app.get('port'), () => {
 //   console.log(`Application Running: http://localhost:${server.address().port}`);
 // });
-const server = https.createServer(options, app).listen(app.get("port"), () => {
+
+const server = https.createServer(options, app)
+  .listen(app.get("port"), () => {
   console.log(`Application Running: https://localhost:${server.address().port}`);
 });
 
@@ -44,21 +56,23 @@ const ttsData = { gender: 'FEMALE',
                   lang: 'en-US'
                 };
 
-const io = require('socket.io')(server);
+/** make tts files 
+*/
+let wordList;
 
-io.on('connection', async (socket) => {
-  console.log(`user connected: ${socket.id}`);
-
-  let wordList;
-
-  /** make tts datas */
+(async() => {
   await ttsEng(sheetData, ttsData)
   .then(({ wordList, wordHead}) => {
     db.insertWordHead('studyEng', wordHead);
     wordList = wordList;
   });
+})();
 
-  
+const io = require('socket.io')(server);
+
+io.on('connection', async (socket) => {
+  console.log(`user connected: ${socket.id}`);
+
 
   /* display studyList in Reveal.js */
   socket.on('access-page', async (page) => {

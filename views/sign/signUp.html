@@ -5,23 +5,61 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+    <!-- fontawsome -->
+    <script src="https://kit.fontawesome.com/0ef7ff4b6e.js" crossorigin="anonymous" ></script>
+    <!-- firebase -->
+    <script src="https://www.gstatic.com/firebasejs/7.5.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.5.2/firebase-auth.js"></script>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+    <!-- css -->
+    <link rel="stylesheet" href="/css/style.css" />
+    <script src="https://www.w3schools.com/lib/w3.js"></script>
 </head>
 <body>
+  <div w3-include-HTML="/components/navibar.html"></div>
+  <script>
+      w3.includeHTML();
+  </script>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://www.gstatic.com/firebasejs/7.5.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/7.5.2/firebase-analytics.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/7.5.2/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script>
-  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css" />
-  <div id="main">
-    <form name="form1" action="sign" method="POST">
-      <input type="button" id="login" value="Google Login">
-    </form>
-    <form name="form1" action="signout" method="POST">
-      <input type="button" id="logout" value="Google Logout">
-    </form>
-    <p id="welcome">안녕하세요!</p>
+  <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-auth.js"></script>
+  <div id="login_div" class="main-div">
+    <h3>Login with Email</h3>
+    <input type="email" placeholder="Email..." id="email_field">
+    <input type="password" placeholder="Password..." id="password_field">
+    <button onclick="login()">Login to Account</button>
+
+    <div class="border"></div>
+
+    <h3>Social Login</h3>
+    <button id="login-google" onclick="loginSocial('Google')">
+      <i class="bi bi-google"></i>
+      <p style="width:20px; display:inline-block"></p>
+      Sign in with Google 
+    </button>
+    <button id="login-facebook" onclick="loginSocial('Facebook')">
+      <i class="bi bi-facebook"></i>
+      <p style="width:20px; display:inline-block"></p>
+      Sign in with Facebook 
+    </button>
   </div>
+
+  <div id="user_div" class="loggedin-div">
+    <h3>Welcome User</h3>
+    <p id="user_para">Welcome to Firebase web login Example. You're current logged in...</p>
+    <button onclick="logout()">Logout</button>
+  </div>
+  <!-- socket.io -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- jquery -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous" ></script>
+  <!-- bootstrap -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous" ></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous" ></script>
+  <script src="/components/firebaseConfig.js"></script>
   <script src="/js/sign/signUp.js"></script>
 </body>
 </html>

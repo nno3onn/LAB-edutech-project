@@ -20,18 +20,6 @@ const options = {
   ca: fs.readFileSync("./public/ssl/ca_bundle.crt"),
 };
 
-/** Cookie
- * 
- */
- const parseCookies = (cookie = '') => 
- cookie
-     .split(';')
-     .map(v => v.split('='))
-     .reduce((acc, [k, v]) => {
-         acc[k.trim()] = decodeURIComponent(v);
-         return acc;
-     }, {});
-
 /**
  * Get port from environment and store in Express.
  */
@@ -41,7 +29,6 @@ app.set("port", process.env.PORT || 8080); // express 서버 포트 설정
 //   .listen(app.get('port'), () => {
 //   console.log(`Application Running: http://localhost:${server.address().port}`);
 // });
-
 const server = https.createServer(options, app)
   .listen(app.get("port"), () => {
   console.log(`Application Running: https://localhost:${server.address().port}`);

@@ -33,7 +33,7 @@ time, mark, audio, video {
 }
 
 #navibar {
-  position: fixed;
+  /* position: fixed; */
   background-color: gainsboro;
   width: 100%;
   height:60px;
@@ -117,4 +117,68 @@ time, mark, audio, video {
   font-size: 30px;
   width: 70px;
   line-height: 50px;
+}
+
+
+/* signUp */
+.main-div, .loggedin-div {
+  text-align: center;
+  width: 500px;
+  margin: 0px auto;
+  margin-top: 150px;
+  padding: 20px;
+}
+.main-div input {
+  display: block;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #fff;
+  padding: 15px;
+  outline: none;
+  width: 100%;
+  margin-bottom: 20px;
+}
+.main-div input:focus {
+  border: 1px solid #777;
+}
+.main-div button, .loggedin-div button {
+  margin: 10px auto;
+  background: #5d8ffc;
+  color: #fff;
+  border: 0px transparent;
+  border-radius: 5px;
+  padding: 15px;
+  display: block;
+  width: 100%;
+  -webkit-transform: 0.3s;
+  -moz-transform: 0.3s;
+}
+.main-div button:hover, .loggedin-div button:hover{
+  background: #fff;
+  color: #5d8ffc;
+  border: 1px solid #5d8ffc;
+  cursor: pointer;
+}
+.border {
+  background: #ccc;
+  height: 1px;
+  margin: 45px auto;
+}
+#login-google {
+  background: #db3236;
+}
+#login-facebook {
+  background: #3b5998;
+}
+#login-google:hover {
+  background: #fff;
+  color: #db3236;
+  border: 1px solid #db3236;
+  cursor: pointer;
+}
+#login-facebook:hover {
+  background: #fff;
+  color: #3b5998;
+  border: 1px solid #3b5998;
+  cursor: pointer;
 }

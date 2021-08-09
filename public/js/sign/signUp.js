@@ -1,75 +1,88 @@
-// const provider = new firebase.auth.GoogleAuthProvider();
+firebase.auth().onAuthStateChanged((user) => {
+  console.log('hi')
+  if (user) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/firebase.User
+    $('#user_div').css('display', 'block');
+    $('#login_div').css('display', 'none');
+    // let uid = user.uid;
 
-// firebase.auth().signInWithPopup(provider0.then((result) => {
-//   let token = result.credential.accessToken;
-//   let user = result.user;
-// }))
-console.log(firebase);
+    const user = firebase.auth().currentUser;
+    if (user !== null) {
+      // The user object has basic properties such as display name, email, etc.
+      const uid = user.uid;
+      const displayName = user.displayName;
+      const email = user.email;
+      const photoURL = user.photoURL;
+      const emailVerified = user.emailVerified;
 
-firebase.initializeApp({
-  apiKey: 'AIzaSyA4-07aYWAvCFXh5PWpI3fYVu4MFwquNgI',
-  authDomain: 'edutech-318507.firebaseapp.com',
-  projectId: 'edutech-318507',
-  storageBucket: 'edutech-318507.appspot.com',
-  messagingSenderId: '194404881591',
-  appId: '1:194404881591:web:39198ee613a95b9fa1e932'
+      $("#user_para").text(`Welcome User : ${email} ${displayName} ${uid} ${photoURL} ${emailVerified}`)
+
+      global.user = displayname;
+      // The user's ID, unique to the Firebase project. Do NOT use
+      // this value to authenticate with your backend server, if
+      // you have one. Use User.getToken() instead.
+    }
+    // ...
+  } else {
+    // User is signed out
+    $('#user_div').css('display', 'none');
+    $('#login_div').css('display', 'block');
+  }
 });
 
-const user = firebase.auth().currentUser;
-console.log(user)
 
-if (user !== null) {
-  user.providerData.forEach((profile) => {
-    
-    $('#welcome').text(`${profile.providerID}님 안녕하세요!`);
-    console.log("Sign-in provider: " + profile.providerId);
-    console.log("  Provider-specific UID: " + profile.uid);
-    console.log("  Name: " + profile.displayName);
-    console.log("  Email: " + profile.email);
-    console.log("  Photo URL: " + profile.photoURL);
-  });
-} else {
-}
+function login() {
+  let userEmail = $('#email_field').val();
+  let userPass = $('#password_field').val();
 
-$("#login").on('click', e => {
-  console.log(111)
-
-  firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-  .then(() => {
-    let provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          // 로그인 되어 있을 때 처리
-        } else {
-          firebase.auth().signInWithPopup(provider)
-            .then((result) => {
-              let token = result.credential.accessToken;
-              let user = result.user;
-              console.log(token, user);
-              $('#welcome').text(`${user.displayName}님 안녕하세요!`);
-            })
-            .catch(err => {
-              let errorCode = error.code;
-              let errorMessage = error.message;
-              let email = error.email;
-              let credential = error.credential;
-              console.log(err);
-          });
-        }
-    })
+  firebase.auth().createUserWithEmailAndPassword(userEmail, userPass)
+  .then((userCredential) => {
+    // Signed in
+    var user = userCredential.user;
+    // ...
   })
-  .catch(error => {
+  .catch((error) => {
     let errorCode = error.code;
     let errorMessage = error.message;
-    console.log(error)
-    console.log(errorCode, errorMessage);
+    alert(`Error: ${errorMessage}`);
   });
-});
+}
 
-$('#logout').on('click', e => {
+function logout() {
   firebase.auth().signOut().then(() => {
-    $('#welcome').text(`안녕하세요!`);
-  }).catch((err) => {
-    console.log(err);
-  })
-});
+    // success
+  }).catch((error) => {
+    alert('Error: ', error);
+  });
+}
+
+function loginSocial(social) {
+  let provider;
+  if (social === 'Google') {
+    provider = new firebase.auth.GoogleAuthProvider();
+  } else if (social === 'Facebook') {
+    provider = new firebase.auth.FacebookAuthProvider();
+  }
+  firebase.auth()
+  .signInWithPopup(provider)
+  .then((result) => {
+    /** @type {firebase.auth.OAuthCredential} */
+    var credential = result.credential;
+
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    var token = credential.accessToken;
+    // The signed-in user info.
+    var user = result.user;
+    // ...
+  }).catch((error) => {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // The email of the user's account used.
+    var email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    var credential = error.credential;
+    // ...
+  });
+}

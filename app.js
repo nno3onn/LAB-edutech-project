@@ -1,30 +1,30 @@
 const createError = require('http-errors');
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-/** .env 파일 자동으로 인식하여 환경변수 설정하기
- */
-require('dotenv').config();
-const firebase = require('firebase');
-const firebaseAdmin = require('firebase-admin');
+// const firebase = require('firebase/app');
+// require('firebase/auth');
+// const firebaseAdmin = require('firebase-admin');
 
 /* firebase init */
-firebase.initializeApp({
-  apiKey: process.env.apiKey,
-  authDomain: process.env.authDomain,
-  databaseURL: process.env.databaseURL,
-  projectId: process.env.projectId,
-  storageBucket: process.env.storageBucket,
-  messagingSenderId: process.env.messagingSenderId,
-  appId: process.env.appId
-});
-/* firebase admin init */
-firebaseAdmin.initializeApp({
-  credential: firebaseAdmin.credential.cert(require('./public/serviceAccountKey.json'))
-});
+// firebase.initializeApp({
+//   apiKey: process.env.apiKey,
+//   authDomain: process.env.authDomain,
+//   databaseURL: process.env.databaseURL,
+//   projectId: process.env.projectId,
+//   storageBucket: process.env.storageBucket,
+//   messagingSenderId: process.env.messagingSenderId,
+//   appId: process.env.appId
+// });
+// /* firebase admin init */
+// firebaseAdmin.initializeApp({
+//   credential: firebaseAdmin.credential.cert(require('./public/serviceAccountKey.json'))
+// });
 
+// export { firebase as default};
 
 /* 라우팅 모듈 선언 */
 const routes = require('./routes');
@@ -44,6 +44,7 @@ app.set('view engine', 'html');
 
 app.use(logger('dev'));
 app.use(express.json());
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 

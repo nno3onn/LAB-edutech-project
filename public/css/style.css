@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&family=Roboto&display=swap');
 
 /* CSS Reset */
 html, body, div, span, object, iframe,
@@ -23,9 +23,13 @@ time, mark, audio, video {
 }
 
 * {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto', 'Noto Sans KR', sans-serif;
 }
-
+#noUser {
+  margin-top: 100px;
+  text-align: center;
+  font-size: 24px;
+}
 #videoElement {
   width: 500px;
   height: 375px;
@@ -121,6 +125,13 @@ time, mark, audio, video {
 
 
 /* signUp */
+#signUp {
+  margin: 10px 20px;
+  width: 80px;
+  font-size: 18px;
+  text-decoration: none;
+  color: #777;
+}
 .main-div, .loggedin-div {
   text-align: center;
   width: 500px;
@@ -140,6 +151,11 @@ time, mark, audio, video {
 }
 .main-div input:focus {
   border: 1px solid #777;
+}
+.main-div h3, .loggedin-div h3 {
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 18px;
 }
 .main-div button, .loggedin-div button {
   margin: 10px auto;
@@ -181,4 +197,27 @@ time, mark, audio, video {
   color: #3b5998;
   border: 1px solid #3b5998;
   cursor: pointer;
+}
+
+/* profile */
+.profile {
+  width: 500px;
+  margin: 20px auto;
+  text-align: center
+}
+.table {
+  margin-top: 50px;
+}
+#welcome {
+  font-weight: bold;
+  margin: 40px;
+}
+#photoURL {
+  border-radius: 100%;
+}
+#displayName {
+  line-height: 30px;
+}
+#email {
+  color: #5f6368;
 }

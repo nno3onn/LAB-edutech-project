@@ -7,10 +7,10 @@ const url = require('url');
 const qs = require('querystring');
 
 /* get fs modules */
-const db = require('../public/js/db.js'); // make tables in SQLite DB
+const db = require('../public/js/createdb.js'); // make tables in SQLite DB
 const { ttsEng } = require('../public/js/study/tts');
 // const stt = require('../publicjs/study/stt');
-// const webhook = require('../public/js/webhook');
+// const webhook = require('../public/js/webhook'); // quiz
 const { getSheet } = require('../public/js/googleSheets');
 
 /* https ssl */
@@ -49,9 +49,9 @@ let wordList;
 
 (async() => {
   await ttsEng(sheetData, ttsData)
-  .then(({ wordList, wordHead}) => {
-    db.insertWordHead('studyEng', wordHead);
-    wordList = wordList;
+  .then((data) => {
+    // db.insertWordHead('studyEng', wordHead);
+    wordList = data.wordList;
   });
 })();
 
@@ -69,13 +69,24 @@ io.on('connection', async (socket) => {
     }
   });
 
+  /** LOGIN SCREEN
+   * 
+   */
+  /* get user data */
+  socket.on('login', (user) => {
+    const { uid, email, providerData, lastLoginAt, createdAt } = user;
+    const providerId = providerData[0].providerId.split('.')[0];
+    console.log(uid, email, providerId, lastLoginAt, createdAt);
+
+    // db.
+  });
+
   /** STUDY SCREEN
   * 
   */
   /* count o,x */
   socket.on('study-oxCount', (id, check) => {
     console.log(id, check);
-
   });
 
 
@@ -83,5 +94,6 @@ io.on('connection', async (socket) => {
    * 
    */
   socket.on('disconnect', () => { console.log(`user disconnected: ${socket.id}`);
+  
   });
 });

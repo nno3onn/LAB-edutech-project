@@ -4,6 +4,7 @@ let socket = io();
 socket.emit('access-page', '/study/study');
 
 socket.on("wordList", async(wordArray) => {
+  console.log(wordArray)
   await revealStudyList(wordArray)
     .then(() => {
       $("#loading").remove();

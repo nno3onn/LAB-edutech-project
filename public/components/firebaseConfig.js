@@ -7,15 +7,16 @@ var firebaseConfig = {
   messagingSenderId: "194404881591",
   appId: "1:194404881591:web:39198ee613a95b9fa1e932"
 };
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     // User is signed in, see docs for a list of available properties
     // https://firebase.google.com/docs/reference/js/firebase.User
     // let uid = user.uid;
     const user = firebase.auth().currentUser;
+
     if (user !== null) {
       // User is signed in
       $("#signUp").css('display', 'none');
@@ -31,8 +32,9 @@ firebase.auth().onAuthStateChanged((user) => {
 function logout() {
   firebase.auth().signOut().then(() => {
     // success
+    window.location.href = '/';
+    alert('계정이 로그아웃 되었습니다.');
   }).catch((error) => {
     alert('Error: ', error);
   });
-  alert('계정이 로그아웃 되었습니다.');
 }

@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Document</title>
+  <!-- fontawsome -->
   <script src="https://kit.fontawesome.com/0ef7ff4b6e.js" crossorigin="anonymous" ></script>
+  <!-- firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-auth.js"></script>
+  <!-- bootstrap -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+  <!-- css -->
   <link rel="stylesheet" href="/css/style.css" />
   <script src="https://www.w3schools.com/lib/w3.js"></script>
 </head>
@@ -16,10 +23,47 @@
   <script>
       w3.includeHTML();
   </script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous" ></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous" ></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous" ></script>
-    <script src="/js/accounts/mypage.js"></script>
+  <div class="profile" style="display: none;">
+    <p id="welcome">안녕하세요 !</p>
+    <img id="photoURL" src="/resources/images/user.png" width="80" height="80"/>
+    <div id="displayName"></div>
+    <div id="email"></div>
+
+    <table class="table">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">데이터</th>
+          <th scope="col">값</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">생성일자</th>
+          <td id="creationTime"></td>
+        </tr>
+        <tr>
+          <th scope="row">최근 접속 일자</th>
+          <td id="lastSignInTime"></td>
+        </tr>
+        <tr>
+          <th scope="row">phone</th>
+          <td id="phoneNumber"></td>
+        </tr>
+        <tr>
+          <th scope="row">provider</th>
+          <td id="providerId"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- socket.io -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- jquery -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous" ></script>
+  <!-- bootstrap -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous" ></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous" ></script>
+  <script src="/components/firebaseConfig.js"></script>
+  <script src="/js/accounts/mypage.js"></script>
 </body>
 </html>

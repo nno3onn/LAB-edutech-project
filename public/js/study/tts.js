@@ -116,6 +116,7 @@ const ttsEng = ( sheetData, ttsData ) => {
           wordList.push(obj);
         });
         console.log('tts-eng finished.');
+        // resolve({ wordList });
         resolve({ wordList, wordHead });
       });
   });

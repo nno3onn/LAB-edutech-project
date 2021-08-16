@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-// const controller = require('./main.controller');
 
 router.get('/mypage', (req, res, next) => {
     res.render('mypage');

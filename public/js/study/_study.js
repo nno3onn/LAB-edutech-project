@@ -1,7 +1,9 @@
 import revealStudyList from './revealStudyList.js';
 
 let socket = io();
-socket.emit('access-page', '/study/study');
+socket.on('study', (a) => {
+  console.log(a)
+});
 
 socket.on("wordList", async(wordArray) => {
   console.log(wordArray)

@@ -1,11 +1,47 @@
 const express = require('express');
 const router = express.Router();
 
+const db = require('../public/js/createdb.js'); // make tables in SQLite DB
+const { ttsEng } = require('../public/js/study/tts');
+
+/* execute tts english word list */
+const sheetData = { keypath: "../grpckey.json",
+                    docID: "1Ak7DXz9kBoos5CW8_0aJ77ZeaG_uS_Uk6MGeD10L2Gg",
+                    title: "eng"
+                  };
+const ttsData = { gender: 'FEMALE',
+                  lang: 'en-US'
+                };
+
 router.get('/study', (req, res, next) => {
-    res.render('study');
+  let io = req.app.get('socketio');
+
+  io.on('connection', async (socket) => {
+    /** make tts files */
+    await ttsEng(sheetData, ttsData)
+    .then((data) => {
+      // db.insertWordHead('studyEng', wordHead);
+      wordList = data.wordList;
+      
+      socket.emit('study', data.wordList);
+    });
+
+    /* count o,x */
+    socket.on('study-oxCount', (id, check) => {
+      console.log('study-oxcount: id-',id, 'check-',check);
+    });
+    
+  });
+  res.render('study');
 });
+
 router.get('/quiz', (req, res, next) => {
-    res.render('quiz');
+  let io = req.app.get('socketio');
+  io.on('connection', (socket) => {
+    socket.emit('quiz', 'this is quiz page');
+  })
+
+  res.render('quiz');
 });
 
 module.exports = router;

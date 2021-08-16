@@ -5,27 +5,6 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-// const firebase = require('firebase/app');
-// require('firebase/auth');
-// const firebaseAdmin = require('firebase-admin');
-
-/* firebase init */
-// firebase.initializeApp({
-//   apiKey: process.env.apiKey,
-//   authDomain: process.env.authDomain,
-//   databaseURL: process.env.databaseURL,
-//   projectId: process.env.projectId,
-//   storageBucket: process.env.storageBucket,
-//   messagingSenderId: process.env.messagingSenderId,
-//   appId: process.env.appId
-// });
-// /* firebase admin init */
-// firebaseAdmin.initializeApp({
-//   credential: firebaseAdmin.credential.cert(require('./public/serviceAccountKey.json'))
-// });
-
-// export { firebase as default};
-
 /* 라우팅 모듈 선언 */
 const routes = require('./routes');
 
@@ -33,7 +12,7 @@ const app = express();
 
 /* view 경로 설정 */
 app.set('views', [path.join(__dirname, 'views'),
-                  path.join(__dirname, 'views/home'),
+                  path.join(__dirname, 'views/main'),
                   path.join(__dirname, 'views/study'),
                   path.join(__dirname, 'views/sign'),
                   path.join(__dirname, 'views/accounts')]);

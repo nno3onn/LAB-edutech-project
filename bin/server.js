@@ -1,17 +1,15 @@
-const app = require('../app');
+const app = require('../app.js');
 const path = require('path');
 const fs = require("fs");
 const http = require('http');
 const https = require("https");
-const url = require('url');
-const qs = require('querystring');
 
 /* get fs modules */
 const db = require('../public/js/createdb.js'); // make tables in SQLite DB
-const { ttsEng } = require('../public/js/study/tts');
+// const { ttsEng } = require('../public/js/study/tts');
 // const stt = require('../publicjs/study/stt');
 // const webhook = require('../public/js/webhook'); // quiz
-const { getSheet } = require('../public/js/googleSheets');
+// const { getSheet } = require('../public/js/googleSheets');
 
 /* https ssl */
 const options = {
@@ -45,55 +43,55 @@ const ttsData = { gender: 'FEMALE',
 
 /** make tts files 
 */
-let wordList;
-
+// let wordList;
 (async() => {
   await ttsEng(sheetData, ttsData)
-  .then((data) => {
+  // .then((data) => {
     // db.insertWordHead('studyEng', wordHead);
-    wordList = data.wordList;
-  });
+    // wordList = data.wordList;
+  // });
 })();
 
 const io = require('socket.io')(server);
 
+app.set('socketio', io);
 io.on('connection', async (socket) => {
   console.log(`user connected: ${socket.id}`);
 
-
   /* display studyList in Reveal.js */
-  socket.on('access-page', async (page) => {
-    switch (page) {
-      case '/study/study':
-        socket.emit('wordList', wordList);
-    }
-  });
+  // socket.on('access-page', async (page) => {
+  //   switch (page) {
+  //     case '/study/study':
+  //       socket.emit('wordList', wordList);
+  //   }
+  // });
 
   /** LOGIN SCREEN
    * 
    */
-  /* get user data */
-  socket.on('login', (user) => {
-    const { uid, email, providerData, lastLoginAt, createdAt } = user;
-    const providerId = providerData[0].providerId.split('.')[0];
-    console.log(uid, email, providerId, lastLoginAt, createdAt);
+  // /* get user data */
+  // socket.on('login', (user) => {
+  //   const { uid, email, providerData, lastLoginAt, createdAt } = user;
+  //   const providerId = providerData[0].providerId.split('.')[0];
+  //   console.log('login data:',uid, email, providerId, lastLoginAt, createdAt);
 
-    // db.
-  });
+  //   // db.
+  // });
 
-  /** STUDY SCREEN
-  * 
-  */
-  /* count o,x */
-  socket.on('study-oxCount', (id, check) => {
-    console.log(id, check);
-  });
+  // /** STUDY SCREEN
+  // * 
+  // */
+  // /* count o,x */
+  // socket.on('study-oxCount', (id, check) => {
+  //   console.log('study-oxcount: id-',id, 'check-',check);
+  // });
 
 
-  /** QUIZ SCREEN
-   * 
-   */
-  socket.on('disconnect', () => { console.log(`user disconnected: ${socket.id}`);
+  // /** QUIZ SCREEN
+  //  * 
+  //  */
+  // socket.on('disconnect', () => { console.log(`user disconnected: ${socket.id}`);
   
-  });
+  // });
 });
+

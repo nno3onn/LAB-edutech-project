@@ -5,8 +5,8 @@ const http = require('http');
 const https = require("https");
 
 /* get fs modules */
-const db = require('../public/js/createdb.js'); // make tables in SQLite DB
-// const { ttsEng } = require('../public/js/study/tts');
+const db = require('../public/js/db.js'); // make tables in SQLite DB
+const tts = require('../public/js/study/tts');
 // const stt = require('../publicjs/study/stt');
 // const webhook = require('../public/js/webhook'); // quiz
 // const { getSheet } = require('../public/js/googleSheets');
@@ -44,13 +44,15 @@ const ttsData = { gender: 'FEMALE',
 /** make tts files 
 */
 // let wordList;
-(async() => {
-  await ttsEng(sheetData, ttsData)
+// (async() => {
+  // tts.tts('en-US', 'FEMALE', 'hello world');
+  //  .then(a => console.log(a))
+  // await ttsEng(sheetData, ttsData)
   // .then((data) => {
     // db.insertWordHead('studyEng', wordHead);
     // wordList = data.wordList;
   // });
-})();
+// })();
 
 const io = require('socket.io')(server);
 

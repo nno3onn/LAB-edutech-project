@@ -21,7 +21,7 @@ router.get('/', (req, res, next) => {
 });
 
 
-router.post('/sign', (req, res, next) => {
+router.post('/', (req, res, next) => {
   firebase.auth().signInWithPopup(provider)
   .then((firebaseUser) => {
     res.render('home', {title: '로그인 완료'});
@@ -29,7 +29,7 @@ router.post('/sign', (req, res, next) => {
   .catch((err) => {
     console.error(err);
     alert('ERROR! ', err);
-    res.redirect('signUp');
+    res.redirect('sign');
   })
 });
 

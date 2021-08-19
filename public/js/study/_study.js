@@ -1,13 +1,9 @@
-import revealStudyList from './revealStudyList.js';
+import revealList from './revealStudyList.js';
 
 let socket = io();
-socket.on('study', (a) => {
-  console.log(a)
-});
 
-socket.on("wordList", async(wordArray) => {
-  console.log(wordArray)
-  await revealStudyList(wordArray)
+socket.on('study', async (list) => {
+  await revealList(list)
     .then(() => {
       $("#loading").remove();
       let start = `<p class="study-title">Day 1</p>

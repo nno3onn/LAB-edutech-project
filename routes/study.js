@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const db = require('../public/js/createdb.js'); // make tables in SQLite DB
-const { ttsEng } = require('../public/js/study/tts');
+const db = require('../public/js/db.js'); // make tables in SQLite DB
+const studyList = require('../public/js/study/studyList.js')
+// const { ttsEng, dbToTTS } = require('../public/js/study/tts');
 
 /* execute tts english word list */
 const sheetData = { keypath: "../grpckey.json",
@@ -13,18 +14,23 @@ const ttsData = { gender: 'FEMALE',
                   lang: 'en-US'
                 };
 
-router.get('/study', (req, res, next) => {
-  let io = req.app.get('socketio');
+/* study page */
+// router.get('/study', (req, res, next) => {
+//   // let io = req.app.get('socketio');
 
+//   // io.on('connection', async (socket) => {
+//   // });
+//   res.render('study');
+// });                
+
+router.get('/study', async (req, res, next) => {
+  // const list = await studyList('english');
+  const list = await studyList('bible');
+  // console.log(list)
+
+  let io = req.app.get('socketio');
   io.on('connection', async (socket) => {
-    /** make tts files */
-    await ttsEng(sheetData, ttsData)
-    .then((data) => {
-      // db.insertWordHead('studyEng', wordHead);
-      wordList = data.wordList;
-      
-      socket.emit('study', data.wordList);
-    });
+    socket.emit('study', list);
 
     /* count o,x */
     socket.on('study-oxCount', (id, check) => {
@@ -40,7 +46,6 @@ router.get('/quiz', (req, res, next) => {
   io.on('connection', (socket) => {
     socket.emit('quiz', 'this is quiz page');
   })
-
   res.render('quiz');
 });
 

@@ -11,8 +11,6 @@
   <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-analytics.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-auth.js"></script>
-  <link rel="stylesheet" href="/css/dist/reveal.css" />
-  <link rel="stylesheet" href="/css/dist/theme/sky.css" />
   <link rel="stylesheet" href="/css/style.css" />
   <script src="https://www.w3schools.com/lib/w3.js"></script>
 </head>
@@ -21,22 +19,13 @@
   <script>
     w3.includeHTML();
   </script>
-  
-  <i id="icon-listen" class="fas fa-headphones fa-3x"></i>
-  <div class="reveal">
-    <div class="slides" id="slide">
-      <section id="first-page">
-        <p id="loading">loading . . .</p>
-      </section>
-    </div>
+  <div class="study-container">
+    <button class="study btn btn-secondary" id="btn-study" onclick="location.href='/study/study/english'">영어단어 공부하기</button>
+    <button class="study btn btn-secondary" id="btn-study" onclick="location.href='/study/study/bible'">성경책 읽기</button>
+    <button class="study btn btn-secondary" id="btn-study" onclick="location.href='/study/study/'">study3</button>
+    <button class="study btn btn-secondary" id="btn-study" onclick="location.href='/study/study/'">study4</button>
+    <button class="study btn btn-secondary" id="btn-study" onclick="location.href='/study/study/'">study5</button>
   </div>
-  <script src="/css/dist/reveal.js"></script>
-  <script>
-    Reveal.initialize({
-      // keyboardCondition: 'focused'
-      autoPlayMedia: true,
-    });
-  </script>
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous" ></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous" ></script>

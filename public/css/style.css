@@ -221,3 +221,16 @@ time, mark, audio, video {
 #email {
   color: #5f6368;
 }
+
+/* study */
+.study-container {
+  margin: 20px;
+}
+.study {
+  width: 300px;
+  height: 200px;
+  font-size: 40px;
+  margin: 20px;
+  text-align: center;
+  white-space: normal;
+}

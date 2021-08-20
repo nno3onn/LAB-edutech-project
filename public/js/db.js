@@ -51,7 +51,17 @@ const closeDB = (db) => {
   });
 }
 
-
+const getTables = (dbname) => {
+  return new Promise(resolve => {
+    const db = openDB(`study/${dbname}`);
+    // 모든 테이블명 읽어오기
+    const sql = `SELECT name FROM sqlite_master WHERE type='table'`;
+    db.all(sql, (err, tables) => {
+      if (err) return console.error(err);
+      resolve(tables) ;
+    });
+  });
+}
 
 /** insert user data in db
  * 
@@ -106,4 +116,4 @@ const activity = (uid, wid, cnt) => {
   closeDB(db);
 }
 
-module.exports = { openDB, closeDB, signUp, login, logout, activity };
+module.exports = { openDB, closeDB, getTables, signUp, login, logout, activity };

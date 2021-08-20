@@ -4,7 +4,7 @@ export default function reveal(list) {
     for (const [k, v] of Object.entries(list)) {
       list.map((word) => {
         let temp = `<section>
-                    <audio data-autoplay src="../resources/${word.h1}.mp3"></audio>`;
+                    <audio data-autoplay src="../../../resources/${word.h1}.mp3"></audio>`;
 
         ['h1','h2'].map(v => {
           if (word[v] && typeof(word[v])!=='object') temp += `<p class="study-title">${word[v]}</p>`;

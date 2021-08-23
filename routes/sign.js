@@ -3,6 +3,8 @@ const router = express.Router();
 const firebase = require('firebase');
 const provider = new firebase.auth.GoogleAuthProvider();
 
+const db = require('../public/js/db.js');
+
 /** LOGIN SCREEN
  * 
  */
@@ -14,7 +16,8 @@ router.get('/', (req, res, next) => {
       const { uid, email, providerData, lastLoginAt, createdAt } = user;
       const providerId = providerData[0].providerId.split('.')[0];
       console.log('login success:',uid, email, providerId, lastLoginAt, createdAt);
-      // db에 추가
+
+      db.login(email, uid, providerId, createdAt, lastLoginAt);
     });
   });
   res.render('sign');

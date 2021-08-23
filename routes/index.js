@@ -15,7 +15,7 @@ router.use('/', main);
 router.use('/accounts', accounts);
 router.use('/study', study);
 router.use('/sign', sign);
-
+  
 // router.get('/', (req, res, next) => {
 //     res.send('index page'); 
 //     /*  send(): 문자열로 응답

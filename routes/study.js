@@ -2,7 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const router = express.Router();
 
-const db = require('../public/js/db.js'); // make tables in SQLite DB
+const db = require('../public/js/db.js');
 const studyList = require('../public/js/study/studyList.js')
 // const { ttsEng, dbToTTS } = require('../public/js/study/tts');
 
@@ -17,12 +17,17 @@ const studyList = require('../public/js/study/studyList.js')
 
 
 // list: [array] study list
-const files = fs.readdirSync('./db/study');
-const dbs = files.map(file => file.split('.')[0]);
+const dbs = db.getDBs();
+// const files = fs.readdirSync('./db/study');
+// const dbs = files.map(file => file.split('.')[0]);
 
 /* study page */
 // /study/study
 router.get('/study', async (req, res, next) => {
+  const io = req.app.get('socketio');
+  io.on('connection', async (socket) => {
+    socket.emit('study-dbs', dbs);
+  });
   res.render('study');
 });
 // /study/study/english
@@ -43,18 +48,18 @@ dbs.forEach(async(dbname) => {
     const table = i.name;
     router.get(`/study/${dbname}/${table}`, async (req, res, next) => {
       const io = req.app.get('socketio');
-      console.log('/study',dbname,'/',table)
+      // console.log('/study',dbname,'/',table)
       const list = await studyList(dbname, table);
-      console.log('list:',list, dbname);
+      // console.log('list:',list, dbname);
     
       io.on('connection', async (socket) => {
         socket.emit('study', list);
     
         /* count o,x */
-        socket.on('study-oxCount', (id, check) => {
-          console.log('study-oxcount: id-',id, 'check-',check);
+        socket.on('study-oxCount', (data) => {
+          console.log('study-oxcount: ', data); // { dbname, table, h1, check, uid }
           // db activity insert
-          // dbname, 
+          db.activity(data);
         });
       });
       res.render('studyPage');
@@ -66,7 +71,7 @@ router.get('/quiz', (req, res, next) => {
   let io = req.app.get('socketio');
   io.on('connection', (socket) => {
     socket.emit('quiz', 'this is quiz page');
-  })
+  });
   res.render('quiz');
 });
 

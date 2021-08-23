@@ -234,3 +234,16 @@ time, mark, audio, video {
   text-align: center;
   white-space: normal;
 }
+
+/* mycahrt */
+.chart-container {
+
+}
+.nav {
+  width: 200px;
+  height: 100%;
+  display: inline-block;
+}
+.tab-content {
+  display: inline-block;
+}

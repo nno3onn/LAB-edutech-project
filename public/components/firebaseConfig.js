@@ -30,11 +30,17 @@ firebase.auth().onAuthStateChanged((user) => {
 });
 
 function logout() {
+  const socket = io();
+  const user = firebase.auth().currentUser;
+
+  socket.emit('logout', user.uid);
+  
   firebase.auth().signOut().then(() => {
     // success
     window.location.href = '/';
     alert('계정이 로그아웃 되었습니다.');
   }).catch((error) => {
     alert('Error: ', error);
+    console.log(error)
   });
 }

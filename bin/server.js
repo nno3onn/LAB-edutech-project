@@ -30,33 +30,31 @@ const server = https.createServer(options, app)
 });
 
 /* execute tts english word list */
-const sheetData = { keypath: "../grpckey.json",
-                    docID: "1Ak7DXz9kBoos5CW8_0aJ77ZeaG_uS_Uk6MGeD10L2Gg",
-                    title: "eng"
-                  };
-const ttsData = { gender: 'FEMALE',
-                  lang: 'en-US'
-                };
+// const sheetData = { keypath: "../grpckey.json",
+//                     docID: "1Ak7DXz9kBoos5CW8_0aJ77ZeaG_uS_Uk6MGeD10L2Gg",
+//                     title: "eng"
+//                   };
+// const ttsData = { gender: 'FEMALE',
+//                   lang: 'en-US'
+//                 };
 
 /** make tts files 
 */
-// let wordList;
-// (async() => {
-  // tts.tts('en-US', 'FEMALE', 'hello world');
-  //  .then(a => console.log(a))
-  // await ttsEng(sheetData, ttsData)
-  // .then((data) => {
-    // db.insertWordHead('studyEng', wordHead);
-    // wordList = data.wordList;
-  // });
-// })();
+(async() => {
+  // tts.tts('en-US', 'FEMALE', 'hi');
+  tts.dbToTTS('english', 'FEMALE')
+})();
 
 const io = require('socket.io')(server);
 
 app.set('socketio', io);
+
 io.on('connection', async (socket) => {
   console.log(`user connected: ${socket.id}`);
 
+  socket.on('disconnect', () => {
+    console.log(`user disconnected: ${socket.id}`);
+  });
   // socket.on('logout', (uid) => {
   //   console.log('socket on logout: ', uid);
   //   db.logout(uid);

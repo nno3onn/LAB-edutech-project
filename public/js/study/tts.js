@@ -41,7 +41,7 @@ const tts = (lang, gender, text) => {
       }
       fs.writeFile(`./public/resources/${text}.mp3`, res.audioContent, 'binary', err => {
         if (err) return console.error('ERROR:', err);
-        console.log(`Audio content written to file: ${txt}.mp3`);
+        console.log(`Audio content written to file: ${text}.mp3`);
       });
     });
   });
@@ -148,10 +148,10 @@ const dbToTTS = (dbname, gender) => {
           rows.map(row => {
             for (const [k, v] of Object.entries(row)) {
               if (['h1','h2','d1','d2','d3'].includes(k) && v!==null) {
-                console.log(v)
+                // console.log(v)
                 if (!searchFile('./public/resources', v)) {
                   const lang = checkLang(v)
-                  console.log(v, lang)
+                  // console.log(v, lang)
                   tts(lang, gender, v);
                 }
               }

@@ -4,75 +4,69 @@ const router = express.Router();
 
 const db = require('../public/js/db.js');
 const studyList = require('../public/js/study/studyList.js')
-// const { ttsEng, dbToTTS } = require('../public/js/study/tts');
-
-/* execute tts english word list */
-// const sheetData = { keypath: "../grpckey.json",
-//                     docID: "1Ak7DXz9kBoos5CW8_0aJ77ZeaG_uS_Uk6MGeD10L2Gg",
-//                     title: "eng"
-//                   };
-// const ttsData = { gender: 'FEMALE',
-//                   lang: 'en-US'
-//                 };
-
 
 // list: [array] study list
 const dbs = db.getDBs();
-// const files = fs.readdirSync('./db/study');
-// const dbs = files.map(file => file.split('.')[0]);
 
-/* study page */
-// /study/study
-router.get('/study', async (req, res, next) => {
-  const io = req.app.get('socketio');
-  io.on('connection', async (socket) => {
-    socket.emit('study-dbs', dbs);
-  });
-  res.render('study');
-});
-// /study/study/english
-dbs.forEach(async(dbname) => {
-  const tables = await db.getTables(dbname);
-
-  router.get(`/study/${dbname}`, async (req, res, next) => {    
+async function routeDB(type, dbname) {
+  router.get(`/${type}/${dbname}`, async (req, res, next) => {    
     const io = req.app.get('socketio');
-    const table = tables.map(i => {return i.name});
 
-    io.on('connection', async (socket) => {
-      socket.emit('study-tables', dbname, table);
-    });
-    res.render('studyDiv');
-  });
-// /study/study/english/day_1
-  tables.map(i => {
-    const table = i.name;
-    router.get(`/study/${dbname}/${table}`, async (req, res, next) => {
-      const io = req.app.get('socketio');
-      // console.log('/study',dbname,'/',table)
-      const list = await studyList(dbname, table);
-      // console.log('list:',list, dbname);
-    
-      io.on('connection', async (socket) => {
-        socket.emit('study', list);
-    
-        /* count o,x */
-        socket.on('study-oxCount', (data) => {
-          console.log('study-oxcount: ', data); // { dbname, table, h1, check, uid }
-          // db activity insert
-          db.activity(data);
+    io.on('connection', (socket) => {
+      socket.on('study-dbname', (dbname) => {
+        db.getTables(dbname).then(tables => {
+          tables = tables.map(table => table.name);
+          io.to(socket.id).emit(`study-tables`, { type, dbname, tables })
         });
       });
-      res.render('studyPage');
+    });
+
+    res.render(`studyDiv`);
+  });
+}
+
+async function routeTable(type, dbname, table) {
+  router.get(`/${type}/${dbname}/${table}`, async (req, res, next) => {
+    const io = req.app.get('socketio');
+  
+    io.on('connection', (socket) => {
+      /* send study list */
+      socket.on('study-tableName', (tableName) => {
+        studyList(dbname, tableName).then(list => io.to(socket.id).emit('study', { type, list }));
+      });
+  
+      /* count o,x */
+      socket.on('study-oxCount', (data) => {
+        console.log('study-oxcount: ', data); // { dbname, table, h1, check, uid }
+        db.activity(data);  // db activity insert
+      });
+    });
+
+    res.render(`studyPage`);
+  });
+}
+
+// routing
+['study','quiz'].forEach(type => {
+  router.get(`/${type}`, async (req, res, next) => {
+    const io = req.app.get('socketio');
+    io.on('connection', async (socket) => {
+      io.to(socket.id).emit('study-dbs', {type, dbs});
+    });
+    res.render('study');
+  });
+
+  dbs.forEach(async dbname => {  
+    // /study/study/english
+    routeDB(type, dbname);
+
+    const tables = await db.getTables(dbname);
+    const tableNames = tables.map(i => {return i.name});
+    // /study/study/english/day_1
+    tableNames.map(tableName => {
+      routeTable(type, dbname, tableName);
     });
   });
-});
-
-router.get('/quiz', (req, res, next) => {
-  let io = req.app.get('socketio');
-  io.on('connection', (socket) => {
-    socket.emit('quiz', 'this is quiz page');
-  });
-  res.render('quiz');
 });
 
 module.exports = router;

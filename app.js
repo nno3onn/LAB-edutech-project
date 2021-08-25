@@ -4,10 +4,10 @@ const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const webhook = require('./public/js/study/webhook');
 
 /* 라우팅 모듈 선언 */
 const routes = require('./routes');
-
 const app = express();
 
 /* view 경로 설정 */
@@ -36,6 +36,11 @@ app.use('/', routes);
 app.use((req, res, next) => {
   next(createError(404));
 });
+
+/* webhook */
+app.post('/webhook', (req, res) => {
+  webhook(req, res);
+})
 
 /* error handler */
 app.use((err, req, res, next) => {

@@ -237,13 +237,14 @@ time, mark, audio, video {
 
 /* mycahrt */
 .chart-container {
-
+  display: flex;
+  margin: 20px;
 }
 .nav {
   width: 200px;
-  height: 100%;
-  display: inline-block;
+  display: absolute;
 }
 .tab-content {
   display: inline-block;
+  margin: 0 auto;
 }

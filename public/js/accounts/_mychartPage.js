@@ -1,66 +1,66 @@
 let socket = io();
 
-google.charts.load('current', {packages: ['corechart', 'bar']});
-// google.charts.setOnLoadCallback(drawChart);
-
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     const user = firebase.auth().currentUser;
-    const uid = user.uid;
-    socket.emit('mychart-uid', uid);
+    socket.emit('mychart-uid', user.uid);
   }
 });
 
-socket.on('mychart', (tablesObj) => {
-  console.log('tablesObj: ', tablesObj)
-  let selected = true;
-  for (const [k, v] of Object.entries(tablesObj)) {
-    new Promise(resolve => {
-      const className = selected ? "nav-link active" : "nav-link";
-      const className2 = selected ? "tab-pane fade show active" : "tab-pane fade";
-  
-      let temp = `<a class="${className}" id="${k}-tab" data-toggle="pill" href="#${k}" role="tab" aria-controls="${k}" aria-selected="${selected}">${k}</a>`;
-      $(".nav").append(temp);
-  
-      console.log(v)
-      console.log(Object.values(v));
-      let temp_2 = `<div class="${className2}" id="${k}" role="tabpanel" aria-labelledby="${k}-tab">`;
-      temp_2 += `<div id="${k}-chart"></div>`;
-      temp_2 += `</div>`;
-      $(".tab-content").append(temp_2);
-      selected &&= false;
+console.log(window.location.href.split('/')[5]);
+socket.emit('mychart-dbname', window.location.href.split('/')[5]); 
 
-      console.log(document.getElementById(`${k}-chart`));
-      resolve({k,v});
-    })
-    .then((data) => {
-      const { k,v } = data;
-      console.log(k, v);
+socket.on('mychart', (tablesObj) => {
+  console.log('tablesObj: ', tablesObj);
+  if (document.getElementsByClassName("tab-pane").length !== 0) return;
+
+  const len = Object.keys(tablesObj).length; // 전체 table 수
+
+  for (let i=1; i<=len; i++) { // table 끝에 숫자 순서대로 테이블 읽어오기
+    const tableKey = `${Object.keys(tablesObj)[0].slice(0,-1)}${i}`
+    const tableObj = tablesObj[tableKey];
+    
+    // nav tab
+    let selected = i===1 ? true : false;
+
+    const className = selected ? "nav-link active" : "nav-link";
+    const className2 = selected ? "tab-pane fade show active" : "tab-pane fade";
+    let temp = `<a class="${className}" id="${tableKey}-tab" data-toggle="pill" href="#${tableKey}" role="tab" aria-controls="${tableKey}" aria-selected="${selected}">${tableKey}</a>`;
+    $(".nav").append(temp);
+
+    let temp_2 = `<div class="${className2}" id="${tableKey}" role="tabpanel" aria-labelledby="${tableKey}-tab">`;
+    for (const i in tableObj) {
+      temp_2 += `<div id="${tableKey}-${i}"></div>`;
+    }
+    temp_2 += `</div>`;
+
+    $(".tab-content").append(temp_2);
+    selected &&= false;
+
+
+    for (const [key, value] of Object.entries(tableObj)) {
+      console.log(tableObj, key,value)
+      
+      google.charts.load('current', {packages: ['corechart', 'bar']});
       google.charts.setOnLoadCallback(() => {
-        var data = google.visualization.arrayToDataTable([
-          ['study', 'O', 'X'],
-          ['New York City, NY', 8175000, 8008000],
-          ['Los Angeles, CA', 3792000, 3694000],
-          ['Chicago, IL', 2695000, 2896000],
-          ['Houston, TX', 2099000, 1953000],
-          ['Philadelphia, PA', 1526000, 1517000]
-        ]);
-    
+        let arr = new Array();
+        arr.push(['study', 'O', 'X']);
+        for (let v of value) {
+          arr.push([v.f, v.o, v.x]);
+        }
+
+        var data = google.visualization.arrayToDataTable(arr);
         var options = {
-          title: 'Population of Largest U.S. Cities',
-          chartArea: {width: '50%'},
-          hAxis: {
-            title: 'Total Population',
-            minValue: 0
-          },
-          vAxis: {
-            title: 'City'
-          }
+          title: key,
+          width : 1000, // 가로 px
+          height : 300 + value.length * 30, // 세로 px
+          // bar: { groupWidth: "75%" }, // 그래프 너비 설정 %
+          hAxis: {minValue: 0},
+          // bars: 'horizontal'
         };
-    
-        var chart = new google.visualization.BarChart(document.getElementById(`${k}-chart`));
+        var chart = new google.visualization.BarChart(document.getElementById(`${tableKey}-${key}`));
         chart.draw(data, options);
       });
-    });
+    }
   }
 });

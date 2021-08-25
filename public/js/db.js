@@ -55,7 +55,10 @@ const closeDB = (db) => {
 
 const getDBs = () => {
   const files = fs.readdirSync('./db/study');
-  const dbs = files.map(file => file.split('.')[0]);
+  let dbs = new Array();
+  files.forEach(file => {
+    if(file.split('.')[1] === 'db') dbs.push(file.split('.')[0]);
+  });
   return dbs;
 }
 
@@ -88,56 +91,59 @@ const oxcount = (dbname, table, f) => {
 }
 
 const getoxCount = async(dbname, table) => {
+  // console.log('getoxCount-1', dbname, table)
   return new Promise(resolve => {
     const db = openDB(`study/${dbname}`);
-    // 모든 h1 읽어오기
-    const sql = `SELECT * FROM ${table} ORDER BY f1`; // 오름차순 정렬
+    
     let result = new Object();
-  
-    db.all(sql, (err, rows) => {
+    let empty = 0;
+    // f1, f2, f3의 max 값 구하기
+    const sql = `SELECT MAX(f1), MAX(f2), MAX(f3) FROM ${table}`;
+    db.all(sql, (err, maxs) => {
       if (err) return console.error(err);
-      // f1, f2, f3 여부검사 및 max 알기
-      const lastRow = rows[rows.length-1]; // 마지막 row가 f1, f2, f3의 마지막 숫자
-      let f1, f2, f3;
-      f1 = lastRow.f1;
-      if (lastRow.f2) f2 = lastRow.f2;
-      if (lastRow.f3) f3 = lastRow.f3;
-  
-      let f;
-      new Promise(resolve => {
-        for (let i=1, r=0; i<=f1; i++) {
-          if (f2) {
-            result[i] = {};
-            for (let j=1; j<=f2; j++) {
-              if (f3) {
-                result[i] = {};
-                result[i][j] = {};
-                for (let k=1; k<=f3; k++) {
-                  f = `${i}-${j}-${k}`;
-                  oxcount(dbname, table, f).then(data => {
-                    result[i][j][k] = {h1: rows[r++].h1, o: data.o, x: data.x};
-                    if (r === rows.length) resolve(result);
-                  });
-                }
-              } else {
-                f = `${i}-${j}`;
-                oxcount(dbname, table, f).then(data => {
-                  result[i][j] = {h1: rows[r++].h1, o: data.o, x: data.x};
-                  if (r === rows.length) resolve(result);
-                });
-              }
-            }
-          } else {
-            f = `${i}`;
-            oxcount(dbname, table, f).then(data => {
-              result[i] = {h1: rows[r++].h1, o: data.o, x: data.x};
-              if (r === rows.length) resolve(result);
+
+      const f1 = maxs[0]['MAX(f1)'];
+      const f2 = typeof(maxs[0]['MAX(f2)'])==='number' ? maxs[0]['MAX(f2)'] : false;
+      const f3 = typeof(maxs[0]['MAX(f3)'])==='number' ? maxs[0]['MAX(f3)'] : false;
+      
+      // console.log(dbname, table, f1, f2, f3);
+
+      // 모든 데이터 읽기
+      const sql_2 = `SELECT * FROM ${table}`;
+      db.all(sql_2, (err, rows) => {
+        if (err) return console.error(err);
+
+        new Promise(resolve => {
+
+          rows.forEach((row, index) => {
+            // console.log(row)
+            result[row.f1] = [];
+
+            let field = f2 
+                      ? (f3 
+                          ? `${row.f1}-${row.f2}-${row.f3}` 
+                          : `${row.f1}-${row.f2}`) 
+                      : row.f1;
+            
+            let f = f2
+                  ? (f3
+                      ? `${row.f2}-${row.f3}`
+                      : `${row.f2}`)
+                  : row.f1;
+
+            // console.log(row.f1, row.f2, row.f3, f)
+            oxcount(dbname, table, field).then(data => {
+              result[row.f1].push({h1: row.h1, 
+                  f,
+                  o: data.o, 
+                  x: data.x});
+
+              // console.log(index+1, rows.length)
+              if (index+1 === rows.length) resolve(result);
             });
-          }
-        }
-      }).then(result => {
-        console.log('result:',result)
-        resolve(result);
+            
+          });
+        }).then(result => resolve(result))
       });
     });
     closeDB(db);
@@ -228,57 +234,24 @@ const activity = (data) => {
 const mychart = (uid, dbname) => {
   if (!uid) return console.error('no data');
 
-  // let result = new Object();
   return new Promise(resolve => {
     let resultObj = new Object();
     getTables(dbname).then(tables => {
       tables.map((table) => {
         table = table.name;
         // get all h1s in db table
-        getoxCount(dbname, table).then(data => {
-          resultObj[table] = data;
+        getoxCount(dbname, table).then(result => {
+          resultObj[table] = result;
           
           // resultObj에 모두 넣었을 때 resolve처리
-          if (Object.keys(resultObj).length === tables.length) { 
+          if (Object.keys(resultObj).length === tables.length) {
+            // console.log(resultObj)
             resolve(resultObj);
           }
         });
       });
     });
   });
-  // search all data user db - activity table uid, dbname
-  // const db = openDB('user');
-  // const result = dbs.map(dbname => {
-  //   let objDB = new Object();
-  //   objDB.dbname = dbname;
-  //   getTables(dbname).then(tables => {
-  //     let objData = new Object();
-  //     // result.dbname = tables;
-  //     objData = tables.map(table => {
-  //       table = table.name;
-  //       console.log(uid, dbname, table)
-  //       const sql = `SELECT * from activity
-  //                     WHERE uid='${uid}' AND db='${dbname}' AND table='${table}'`;
-  //       db.all(sql, [], (err, row) => {
-  //         if (err) return console.error(err);
-  //         console.log(row);
-  //       })
-  //       // return { table: 데이터들} 
-  //     });
-  //     // return objDB.data = objData;
-  //   });
-  //   return objDB;
-  // });
-  // console.log('result: ', result)
-
-
-
-  // let sql = `SELECT * from activity
-  //             WHERE uid='${uid}', db='${dbname}' table='${table}'`;
-  // db.all(sql, [], (err, row) => {
-  //   if (err) return console.error(err);
-  //   console.log('search result: ',row);
-  // });
 }
 
 module.exports = { openDB, closeDB, getDBs, getTables, login, logout, activity, mychart };

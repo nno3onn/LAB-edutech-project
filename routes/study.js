@@ -16,7 +16,7 @@ async function routeDB(type, dbname) {
       socket.on('study-dbname', (dbname) => {
         db.getTables(dbname).then(tables => {
           tables = tables.map(table => table.name);
-          io.to(socket.id).emit(`study-tables`, { type, dbname, tables })
+          io.to(socket.id).emit(`study-tables`, { dbname, tables })
         });
       });
     });
@@ -32,7 +32,7 @@ async function routeTable(type, dbname, table) {
     io.on('connection', (socket) => {
       /* send study list */
       socket.on('study-tableName', (tableName) => {
-        studyList(dbname, tableName).then(list => io.to(socket.id).emit('study', { type, list }));
+        studyList(dbname, tableName).then(list => io.to(socket.id).emit('study', list));
       });
   
       /* count o,x */
@@ -51,12 +51,12 @@ async function routeTable(type, dbname, table) {
   router.get(`/${type}`, async (req, res, next) => {
     const io = req.app.get('socketio');
     io.on('connection', async (socket) => {
-      io.to(socket.id).emit('study-dbs', {type, dbs});
+      io.to(socket.id).emit('study-dbs', dbs);
     });
     res.render('study');
   });
 
-  dbs.forEach(async dbname => {  
+  dbs.forEach(async dbname => {
     // /study/study/english
     routeDB(type, dbname);
 

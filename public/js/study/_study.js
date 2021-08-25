@@ -1,8 +1,8 @@
-let socket = io()
+const socket = io();
 
-function getData(data) {
-  const { type, dbs } = data;
-  console.log(type, dbs)
+function getData(dbs) {
+  const type = window.location.href.split('/')[4];
+  console.log(dbs)
   
   dbs.map(db => {
     if (document.getElementsByClassName(db).length !== 0) return;
@@ -10,7 +10,11 @@ function getData(data) {
     let temp = `<button class="study ${db} btn btn-secondary" id="btn-study" onclick="location.href='/study/${type}/${db}'">${db}</button>`;
     $(".study-container").append(temp);
   });
+
+  socket.off('study-dbs')
 }
 
-socket.on('study-dbs', getData);
+socket.on('connect', () => {
+  socket.on('study-dbs', getData);
+});
 

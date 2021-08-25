@@ -1,7 +1,8 @@
-let socket = io();
+const socket = io();
 
 function getData(data) {
-  const { type, dbname, tables } = data;
+  const type = window.location.href.split('/')[4];
+  const { dbname, tables } = data;
   console.log(type, dbname, tables);
 
   if (window.location.href.split('/')[5] === dbname) {
@@ -13,7 +14,10 @@ function getData(data) {
       $(".study-container").append(temp);
     });
   }
+  socket.off('study-tables')
 }
-socket.emit('study-dbname', window.location.href.split('/')[5]);
-socket.on('study-tables', getData);
 
+socket.on('connect', () => {
+  socket.emit('study-dbname', window.location.href.split('/')[5]);
+  socket.on('study-tables', getData);
+});

@@ -4,9 +4,8 @@ const http = require('http');
 const https = require("https");
 
 /* get fs modules */
-const db = require('../public/js/db.js'); // make tables in SQLite DB
+// const db = require('../public/js/db.js'); // make tables in SQLite DB
 const tts = require('../public/js/study/tts');
-// const webhook = require('../public/js/webhook'); // quiz
 
 /* https ssl */
 const options = {
@@ -29,19 +28,9 @@ const server = https.createServer(options, app)
   console.log(`Application Running: https://localhost:${server.address().port}`);
 });
 
-/* execute tts english word list */
-// const sheetData = { keypath: "../grpckey.json",
-//                     docID: "1Ak7DXz9kBoos5CW8_0aJ77ZeaG_uS_Uk6MGeD10L2Gg",
-//                     title: "eng"
-//                   };
-// const ttsData = { gender: 'FEMALE',
-//                   lang: 'en-US'
-//                 };
-
 /** make tts files 
 */
 (async() => {
-  // tts.tts('en-US', 'FEMALE', 'hi');
   tts.dbToTTS('english', 'FEMALE')
 })();
 

@@ -4,7 +4,6 @@ const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const webhook = require('./public/js/study/webhook');
 
 /* 라우팅 모듈 선언 */
 const routes = require('./routes');
@@ -32,15 +31,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 /* 라우팅 모듈 선언 */
 app.use('/', routes);
 
-/* catch 404 and forward to error handler */
-app.use((req, res, next) => {
-  next(createError(404));
-});
-
 /* webhook */
-app.post('/webhook', (req, res) => {
+app.post("/webhook", (req, res) => {
   webhook(req, res);
 })
+
+/* catch 404 and forward to error handler */
+// app.use((req, res, next) => {
+//   next(createError(404));
+// });
+
 
 /* error handler */
 app.use((err, req, res, next) => {

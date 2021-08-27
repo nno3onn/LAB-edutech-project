@@ -76,6 +76,31 @@ const getTables = (dbname) => {
 
 const oxcount = (dbname, table, f) => {
   const db = openDB('user');
+  types = ['study','quiz'];
+
+  let so, sx, qo, qx;
+  return new Promise(resolve => {
+    types.forEach((type, index) => {
+      const sql = `SELECT COUNT(*), SUM(ox) from activity where tb='${table}' AND db='${dbname}' AND f='${f}'`;
+      db.all(sql, (err, row) => {
+        if (err) return console.error(err);
+        console.log(dbname, table, f, row)
+        const total = row[0]['COUNT(*)'];
+        const o = row[0]['SUM(ox)']===null ? 0 : row[0]['SUM(ox)'];
+        const x = total - o;
+
+        if (type==='study') {
+          so = o; sx = x;
+        } else {
+          qo = o; qx = x;
+        }
+
+        console.log('length compare: ',type.length, index+1);
+        if (types.length === index+1) resolve({so, sx, qo, qx});
+      });
+    });
+    closeDB(db);
+  });
   const sql = `SELECT COUNT(*), SUM(ox) from activity where tb='${table}' AND db='${dbname}' AND f='${f}'`;
   return new Promise(resolve => {
     db.all(sql, (err, row) => {
@@ -96,7 +121,6 @@ const getoxCount = async(dbname, table) => {
     const db = openDB(`study/${dbname}`);
     
     let result = new Object();
-    let empty = 0;
     // f1, f2, f3의 max 값 구하기
     const sql = `SELECT MAX(f1), MAX(f2), MAX(f3) FROM ${table}`;
     db.all(sql, (err, maxs) => {
@@ -133,10 +157,13 @@ const getoxCount = async(dbname, table) => {
 
             // console.log(row.f1, row.f2, row.f3, f)
             oxcount(dbname, table, field).then(data => {
-              result[row.f1].push({h1: row.h1, 
+              result[row.f1].push({
+                  h1: row.h1, 
                   f,
-                  o: data.o, 
-                  x: data.x});
+                  so: data.so, 
+                  sx: data.sx,
+                  qo: data.qo,
+                  qx: data.qx});
 
               // console.log(index+1, rows.length)
               if (index+1 === rows.length) resolve(result);
@@ -194,7 +221,7 @@ const logout = (uid) => {
                 SET [on]=0
                 WHERE uid='${uid}'`;
 
-  db.run(sql, (err) => {
+  db.run(sql, function(err) {
     if (err) return console.error('logout error: ',err.message);
     console.log(`A row has been inserted with rowid ${this.lastID}`);
   });
@@ -204,7 +231,7 @@ const logout = (uid) => {
 const activity = (data) => {
   if (!data) return console.error('no data');
 
-  const { dbname, table, h1, check, uid } = data;
+  const { dbname, table, h1, type, check, uid } = data;
   // console.log(data);
   // search f in dbname.db where f1, h1
   const db = openDB(`study/${dbname}`);
@@ -221,8 +248,8 @@ const activity = (data) => {
     // insert activity data in user db - activity table
     const db_2 = openDB('user');
     const sql_2 = `INSERT INTO "activity"
-                  VALUES('${uid}', '${dbname}', '${table}', '${f}', ${check}, '${getCurrentDate()}')`;
-    db_2.run(sql_2, (err) => {
+                  VALUES('${uid}', '${dbname}', '${table}', '${f}', '${type}', ${check}, '${getCurrentDate()}')`;
+    db_2.run(sql_2, function(err) {
       if (err) return console.error(err);
       console.log(`A row has been inserted with rowid ${this.lastID}`);
     });

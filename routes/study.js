@@ -37,7 +37,7 @@ async function routeTable(type, dbname, table) {
   
       /* count o,x */
       socket.on('study-oxCount', (data) => {
-        console.log('study-oxcount: ', data); // { dbname, table, h1, check, uid }
+        console.log('study-oxcount: ', data); // { dbname, table, h1, type, check, uid }
         db.activity(data);  // db activity insert
       });
     });

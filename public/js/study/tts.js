@@ -133,6 +133,7 @@ function checkLang(text) {
  */
 const dbToTTS = (dbname, gender) => {
   return new Promise(() => {
+    console.log('--------------dbToTTS--------------');
     const studyDB = db.openDB(`study/${dbname}`);
     // 모든 테이블명 읽어오기
     const sql = `SELECT name FROM sqlite_master WHERE type='table'`;

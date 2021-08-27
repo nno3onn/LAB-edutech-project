@@ -9,7 +9,7 @@ socket.on('connect', () => {
   socket.emit('study-tableName', tableName);
 
   socket.on('study', (list) => {  
-    if(document.getElementsByClassName('study-title').length !== 0) return;
+    if($('.study-title').length !== 0) return;
   
     revealList(type, list)
     .then(() => {
@@ -21,4 +21,11 @@ socket.on('connect', () => {
 
     socket.off('study');
   });
+
+
+  const d = $('.present').children('.study-title')['0'];
+  const present = d ? d.classList['0'] : false;
+
+  const quiz = type==='quiz' ? true : false;
+  socket.emit('quiz-init', {quiz, present} );
 });

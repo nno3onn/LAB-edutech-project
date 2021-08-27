@@ -56,19 +56,6 @@ const server = https.createServer(options, app).listen(app.get("port"), () => {
   );
 });
 
-// let resrv = {
-//   movie: null,
-//   datetime: null,
-//   seats: null,
-//   set seats(val) {
-//     io.emit("seats", val, resrv);
-//   },
-
-//   //   set datetime(val) {
-//   //     io.emit("resrvTime", val, resrv.product);
-//   //   },
-// };
-
 const io = require("socket.io")(server);
 io.on("connection", (socket) => {
   console.log(`user connected: ${socket.id}`);

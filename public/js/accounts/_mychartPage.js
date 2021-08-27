@@ -44,9 +44,9 @@ socket.on('mychart', (tablesObj) => {
       google.charts.load('current', {packages: ['corechart', 'bar']});
       google.charts.setOnLoadCallback(() => {
         let arr = new Array();
-        arr.push(['study', 'O', 'X']);
+        arr.push(['study', 'study-O', 'study-X', 'quiz-O', 'quiz-X']);
         for (let v of value) {
-          arr.push([v.f, v.o, v.x]);
+          arr.push([v.h1, v.so, v.sx, v.qo, v.qx]);
         }
 
         var data = google.visualization.arrayToDataTable(arr);
@@ -54,7 +54,7 @@ socket.on('mychart', (tablesObj) => {
           title: key,
           width : 1000, // 가로 px
           height : 300 + value.length * 30, // 세로 px
-          // bar: { groupWidth: "75%" }, // 그래프 너비 설정 %
+          bar: { groupWidth: "75%" }, // 그래프 너비 설정 %
           hAxis: {minValue: 0},
           // bars: 'horizontal'
         };

@@ -32,7 +32,7 @@ dbs.forEach(async(dbname) => {
         db.mychart(uid, dbName).then(tablesObj => {
           // console.log('--------------/mychart/dbname', dbname, JSON.stringify(tablesObj) )
           // data 보내기
-          console.log('socketId - mychart: ', socket.id, tablesObj)
+          console.log('socketId - mychart: ', socket.id, JSON.stringify(tablesObj) )
           io.to(socket.id).emit('mychart', tablesObj);
         });
       });

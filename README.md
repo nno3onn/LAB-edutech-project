@@ -55,7 +55,7 @@ Reveal.js를 활용하여 학습할 내용이 슬라이드로 넘어갈 수 있�
 🔹 웹 화면
 ![image](https://user-images.githubusercontent.com/60952506/226072629-caa85dc6-6d4f-4db7-b322-d851f97e15a5.png)
 
-<img src="https://user-images.githubusercontent.com/60952506/226072642-5214cfaf-e4a1-47aa-84bf-9a931606e668.png" width="600" />
+<img src="https://user-images.githubusercontent.com/60952506/226072642-5214cfaf-e4a1-47aa-84bf-9a931606e668.png" width="500" />
 
 ![image](https://user-images.githubusercontent.com/60952506/226072659-629b7f63-9559-46ed-85b0-f5c849c3e038.png)
 
